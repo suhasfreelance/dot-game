@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="info">1) Connect two dots by clicking on them (up and down, not diagonally).
+  					\n\n2) Take turns connecting dots to form lines.
+  					\n\n3) The player who forms the square will get their mark in the square.
+  					\n\n4) The game finishes when all the dots have been connected.
+  					\n\n5) The winner with the most boxes wins!</string>
+    <string name="hello">Hello World, menu!</string>
+    <string name="app_name">Dot Game</string>
+</resources>

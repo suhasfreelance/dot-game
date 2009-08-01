@@ -1,0 +1,16 @@
+
+
+<ScrollView android:id="@+id/ScrollView01" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:background="@drawable/background"><LinearLayout android:id="@+id/LinearLayout01" android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical" android:gravity="center_horizontal"><TextView android:id="@+id/TextView01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center" android:padding="10px" android:text="Start Options" android:textColor="#FFFFFF" android:textSize="30px" android:textStyle="bold"></TextView><EditText android:layout_height="wrap_content" android:hint="Player 1 Name " android:gravity="center" android:padding="10px" android:layout_width="fill_parent" android:layout_marginLeft="15px" android:layout_marginBottom="5px" android:layout_marginRight="15px" android:id="@+id/playerOneName" android:singleLine="true"></EditText><Spinner android:layout_height="wrap_content" android:layout_marginBottom="5px" android:layout_marginLeft="15px" android:layout_marginRight="15px" android:layout_width="fill_parent" android:id="@+id/playerOneColor"></Spinner><TableRow android:id="@+id/TableRow01" android:layout_width="fill_parent" android:layout_margin="15px" android:background="@drawable/blacktransparency" android:gravity="center" android:layout_height="50px"><TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="10px" android:text="2 Players:" android:textColor="#FFFFFF" android:textSize="20px" android:textStyle="bold"></TextView><ToggleButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2 Players" android:id="@+id/twoPlayerMode" android:textOff="OFF" android:textOn="ON"></ToggleButton></TableRow><EditText android:layout_height="wrap_content" android:gravity="center" android:padding="10px" android:layout_width="fill_parent" android:layout_marginLeft="15px" android:layout_marginBottom="5px" android:layout_marginRight="15px" android:singleLine="true" android:hint="Player 2 Name " android:id="@+id/playerTwoName" android:visibility="invisible"></EditText><Spinner android:layout_height="wrap_content" android:layout_marginBottom="5px" android:layout_marginLeft="15px" android:layout_marginRight="15px" android:layout_width="fill_parent" android:id="@+id/playerTwoColor" android:visibility="invisible"></Spinner>
+
+
+
+
+
+
+
+
+
+<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:layout_height="wrap_content" android:layout_width="100px" android:text="Back" android:id="@+id/backToMain"></Button><Button android:layout_height="wrap_content" android:textStyle="bold" android:text="BEGIN!" android:layout_width="100px" android:id="@+id/beginGame"></Button>
+</TableRow>
+</LinearLayout>
+</ScrollView>
