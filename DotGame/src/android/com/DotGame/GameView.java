@@ -26,6 +26,7 @@ public class GameView extends View {
 	Bitmap pressedDot;
 	Paint dot;
 	Paint line;
+	Paint line2;
 	Paint box;
 	Paint scoreText;
 	int dotsPressed;
@@ -44,6 +45,8 @@ public class GameView extends View {
 		line = new Paint();
 		line.setStrokeWidth(5);
 		line.setShadowLayer(2, 4, 4, Color.parseColor("#000000"));
+		line2 = new Paint();
+		line2.setStrokeWidth(7);
 		box = new Paint();
 		box.setShadowLayer(2, 4, 4, Color.parseColor("#000000"));
 		scoreText = new Paint();
@@ -78,6 +81,7 @@ public class GameView extends View {
 		
 		for(Line e: lines){
 			line.setColor(e.getColor());
+			canvas.drawLine(e.getXStart(), e.getYStart(), e.getXEnd(), e.getYEnd(), line2);
 			canvas.drawLine(e.getXStart(), e.getYStart(), e.getXEnd(), e.getYEnd(), line);
 		}
 		
@@ -190,17 +194,21 @@ public class GameView extends View {
 		   }
 		   if(addFlag == 1) {
 			   lines.add(new Line(firstDot, secondDot, player));
-			   checkBox(new Line(firstDot, secondDot, player));
+			   ;
 			   
-			   if(player==1) { player = 2;}
-			   else { player = 1;}
+			   if(checkBox(new Line(firstDot, secondDot, player))) {
+				   if(player==1) { player = 2;}
+				   else { player = 1;}
+			   }
 		   }
 	   }
 	   deselectDots();
    }
    
-   public void checkBox(Line testLine) {
+   public boolean checkBox(Line testLine) {
 	    
+	   boolean switchPlayer = true;
+	   
 	   String[] posLines = new String[6];
 	   int[] addFlag = new int[6];
 	   
@@ -226,10 +234,12 @@ public class GameView extends View {
 		   if(addFlag[0]==1 && addFlag[1]==1 && addFlag[2]==1) {
 			   boxes.add(new Box(Integer.parseInt(posLines[0].substring(0,1)), (Integer.parseInt(posLines[0].substring(1,2))+Integer.parseInt(posLines[0].substring(3,4)))/2, player));
 			   addScore(player);
+			   switchPlayer = false;
 		   }
 		   if(addFlag[3]==1 && addFlag[4]==1 && addFlag[5]==1) {
 			   boxes.add(new Box(Integer.parseInt(testLine.getLineNum().substring(0,1)), (Integer.parseInt(testLine.getLineNum().substring(1,2))+Integer.parseInt(posLines[3].substring(3,4)))/2, player));
 			   addScore(player);
+			   switchPlayer = false;
 		   }
 	   }
 	   else {
@@ -254,12 +264,16 @@ public class GameView extends View {
 		   if(addFlag[0]==1 && addFlag[1]==1 && addFlag[2]==1) {
 			   boxes.add(new Box((Integer.parseInt(posLines[0].substring(0,1))+Integer.parseInt(posLines[0].substring(2,3)))/2, Integer.parseInt(posLines[0].substring(1,2)), player));
 			   addScore(player);
+			   switchPlayer = false;
 		   }
 		   if(addFlag[3]==1 && addFlag[4]==1 && addFlag[5]==1) {
 			   boxes.add(new Box((Integer.parseInt(testLine.getLineNum().substring(0,1))+Integer.parseInt(posLines[3].substring(2,3)))/2, Integer.parseInt(testLine.getLineNum().substring(1,2)), player));
 			   addScore(player);
+			   switchPlayer = false;
 		   }
 	   }
+	   
+	   return switchPlayer;
    }
    
    public void deselectDots() {
