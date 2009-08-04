@@ -33,7 +33,9 @@ public class GameView extends View {
 	Dot secondDot = new Dot(0,0,0,0);
 	int player;
 	String player1, player2;
-	int score1, score2;	
+	int score1, score2;
+	int boxWidth;
+	int boxHeight;
 	
 	public GameView(Context context, Dot[][] grid, ArrayList<Line> lines, ArrayList<Box> boxes, String player1, String player2) {
 		super(context);
@@ -59,12 +61,20 @@ public class GameView extends View {
 		pressedDot = BitmapFactory.decodeResource(getResources(), R.drawable.dot_pressed);
 		dotsPressed = 0;
 		player = 1;
+		boxWidth = grid[1][0].getX_position()-grid[0][0].getX_position();
+		boxHeight = grid[0][1].getY_position()-grid[0][0].getY_position();
 	}
 	
 	@Override
     protected void onDraw(Canvas canvas) {
 		
 		canvas.drawText(player1+": "+score1+"     "+player2+": "+score2, game.getWidth()/2, (float)(game.getWidth()*.1), scoreText);
+		
+		for(Box e: boxes) {
+			box.setColor(e.getColor());
+			//Log.d("Box", "X: "+e.getXPos()+"  Y: "+e.getYPos());
+			canvas.drawRect(e.getXPos(), e.getYPos(), e.getXPos() + boxWidth, e.getYPos() + boxHeight, box);
+		}
 		
 		for(Line e: lines){
 			line.setColor(e.getColor());
@@ -118,7 +128,7 @@ public class GameView extends View {
 		   			//Check y coordinates against same node
 		   			if(Math.abs(grid[i][j].getY_position() - y) < 10){
 		   				//YOU PRESSED A NODE
-		   				Log.d("Dot Pressed", "Dot: " + i + ", " + j);
+		   				//Log.d("Dot Pressed", "Dot: " + i + ", " + j);
 		   				selectDot(i, j);
 		   				return true;
 		   			}
@@ -149,7 +159,7 @@ public class GameView extends View {
 			   checkLine();
 		   }
 	   }
-	   Log.d("Selected:", ""+grid[xPos][yPos].isSelected());
+	   //Log.d("Selected:", ""+grid[xPos][yPos].isSelected());
 	   invalidate();
 	   
    }
@@ -180,31 +190,31 @@ public class GameView extends View {
 		   }
 		   if(addFlag == 1) {
 			   lines.add(new Line(firstDot, secondDot, player));
+			   checkBox(new Line(firstDot, secondDot, player));
 			   
 			   if(player==1) { player = 2;}
 			   else { player = 1;}
-			   checkBox(new Line(firstDot, secondDot, player));
 		   }
 	   }
 	   deselectDots();
    }
    
    public void checkBox(Line testLine) {
-	   Log.d("Is Vertical:", ""+testLine.isVertical());
-	   
+	    
 	   String[] posLines = new String[6];
 	   int[] addFlag = new int[6];
 	   
 	   if(testLine.isVertical()) {
 		   posLines[0] = ""+(Integer.parseInt(testLine.getLineNum().substring(0,1))-1) + testLine.getLineNum().substring(1, 2) + (Integer.parseInt(testLine.getLineNum().substring(2,3))-1) + testLine.getLineNum().substring(3, 4);
-		   posLines[1] = ""+(Integer.parseInt(testLine.getLineNum().substring(0,1))-1) + testLine.getLineNum().substring(1, 4);
-		   posLines[2] = ""+testLine.getLineNum().substring(0,2) + (Integer.parseInt(testLine.getLineNum().substring(2,3))-1) + testLine.getLineNum().substring(3,4);
+		   posLines[1] = ""+(Integer.parseInt(testLine.getLineNum().substring(0,1))-1) + testLine.getLineNum().substring(1, 2) + testLine.getLineNum().substring(0,2);
+		   posLines[2] = ""+(Integer.parseInt(testLine.getLineNum().substring(0,1))-1) + testLine.getLineNum().substring(3, 4) + testLine.getLineNum().substring(2,4);
 		   posLines[3] = ""+(Integer.parseInt(testLine.getLineNum().substring(0,1))+1) + testLine.getLineNum().substring(1, 2) + (Integer.parseInt(testLine.getLineNum().substring(2,3))+1) + testLine.getLineNum().substring(3, 4);
-		   posLines[4] = ""+(Integer.parseInt(testLine.getLineNum().substring(0,1))+1) + testLine.getLineNum().substring(1, 4);
-		   posLines[5] = ""+testLine.getLineNum().substring(0,2) + (Integer.parseInt(testLine.getLineNum().substring(2,3))+1) + testLine.getLineNum().substring(3,4);
+		   posLines[4] = ""+(Integer.parseInt(testLine.getLineNum().substring(0,1))+1) + testLine.getLineNum().substring(1, 2) + testLine.getLineNum().substring(0,2);
+		   posLines[5] = ""+(Integer.parseInt(testLine.getLineNum().substring(0,1))+1) + testLine.getLineNum().substring(3, 4) + testLine.getLineNum().substring(2,4);
 		   
+		   //Log.d(testLine.getLineNum(), ""+posLines[3]+" "+posLines[4]+" "+posLines[5]);
 		   
-		   for(int i = 0; i < 3; i++) {
+		   for(int i = 0; i < 6; i++) {
 			   for(Line e: lines) {
 				   if(e.getLineNum().equalsIgnoreCase(posLines[i]) ||
 						   (e.inverseLineNum(e.getLineNum())).equalsIgnoreCase(posLines[i])) {
@@ -215,12 +225,41 @@ public class GameView extends View {
 			   
 		   if(addFlag[0]==1 && addFlag[1]==1 && addFlag[2]==1) {
 			   boxes.add(new Box(Integer.parseInt(posLines[0].substring(0,1)), (Integer.parseInt(posLines[0].substring(1,2))+Integer.parseInt(posLines[0].substring(3,4)))/2, player));
+			   addScore(player);
 		   }
 		   if(addFlag[3]==1 && addFlag[4]==1 && addFlag[5]==1) {
-			   boxes.add(new Box(Integer.parseInt(posLines[3].substring(0,1)), (Integer.parseInt(posLines[3].substring(1,2))+Integer.parseInt(posLines[3].substring(3,4)))/2, player));
+			   boxes.add(new Box(Integer.parseInt(testLine.getLineNum().substring(0,1)), (Integer.parseInt(testLine.getLineNum().substring(1,2))+Integer.parseInt(posLines[3].substring(3,4)))/2, player));
+			   addScore(player);
 		   }
 	   }
-	   
+	   else {
+		   posLines[0] = ""+testLine.getLineNum().substring(0,1) + (Integer.parseInt(testLine.getLineNum().substring(1, 2))-1) + testLine.getLineNum().substring(2, 3) + (Integer.parseInt(testLine.getLineNum().substring(3,4))-1);
+		   posLines[1] = ""+testLine.getLineNum().substring(0,2) + testLine.getLineNum().substring(0,1) + (Integer.parseInt(testLine.getLineNum().substring(1, 2))-1);
+		   posLines[2] = ""+testLine.getLineNum().substring(2,4) + testLine.getLineNum().substring(2,3) + (Integer.parseInt(testLine.getLineNum().substring(3,4))-1);
+		   posLines[3] = ""+testLine.getLineNum().substring(0,1) + (Integer.parseInt(testLine.getLineNum().substring(1, 2))+1) + testLine.getLineNum().substring(2, 3) + (Integer.parseInt(testLine.getLineNum().substring(3,4))+1);
+		   posLines[4] = ""+testLine.getLineNum().substring(0,2) + testLine.getLineNum().substring(0,1) + (Integer.parseInt(testLine.getLineNum().substring(1, 2))+1);
+		   posLines[5] = ""+testLine.getLineNum().substring(2,4) + testLine.getLineNum().substring(2,3) + (Integer.parseInt(testLine.getLineNum().substring(3,4))+1);
+		   
+		   //Log.d(testLine.getLineNum(), ""+posLines[0]+" "+posLines[1]+" "+posLines[2]);
+		   
+		   for(int i = 0; i < 6; i++) {
+			   for(Line e: lines) {
+				   if(e.getLineNum().equalsIgnoreCase(posLines[i]) ||
+						   (e.inverseLineNum(e.getLineNum())).equalsIgnoreCase(posLines[i])) {
+					   addFlag[i] = 1;
+			   		}
+			   }
+		   }
+			   
+		   if(addFlag[0]==1 && addFlag[1]==1 && addFlag[2]==1) {
+			   boxes.add(new Box((Integer.parseInt(posLines[0].substring(0,1))+Integer.parseInt(posLines[0].substring(2,3)))/2, Integer.parseInt(posLines[0].substring(1,2)), player));
+			   addScore(player);
+		   }
+		   if(addFlag[3]==1 && addFlag[4]==1 && addFlag[5]==1) {
+			   boxes.add(new Box((Integer.parseInt(testLine.getLineNum().substring(0,1))+Integer.parseInt(posLines[3].substring(2,3)))/2, Integer.parseInt(testLine.getLineNum().substring(1,2)), player));
+			   addScore(player);
+		   }
+	   }
    }
    
    public void deselectDots() {
@@ -230,5 +269,14 @@ public class GameView extends View {
 			}
 		}
 	   dotsPressed = 0;
+   }
+   
+   public void addScore(int turn) {
+	   if(turn == 1) {
+		   score1++;
+	   }
+	   else {
+		   score2++;
+	   }
    }
 }
