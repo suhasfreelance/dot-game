@@ -1,0 +1,1 @@
+This is the classic game of dots made for Android.  Unique one and two player modes along with customizable colors and names.
